@@ -95,17 +95,36 @@
 						4. Update the second table to show the total number of wins/losses for the Buffs.
 */
 
-
-
-
-
-
-
-
-
-
-
-
+function loadStatsPage()
+{
+	var table = document.getElementById("stats_table");
+	var hp;
+	var anOpp;
+	var truHome;
+	var wins = 0;
+	var losses = 0;
+	
+	for (hp = 2; hp < table.rows.length; hp++)
+	{
+		truHome = parseInt(table.rows[hp].cells[2].innerHTML);
+		anOpp = parseInt(table.rows[hp].cells[3].innerHTML);
+		
+		if (truHome >= anOpp)
+		{
+			table.rows[hp].cells[4].innerHTML = "CU Boulder";
+			wins++;
+		}
+		
+		else
+		{
+			table.rows[hp].cells[4].innerHTML = table.rows[hp].cells[1].innerHTML;
+			losses++;
+		}
+	}
+	
+	document.getElementById("wins").innerHTML = wins;
+	document.getElementById("losses").innerHTML = losses;
+}
 
 
 /*
@@ -133,7 +152,7 @@
 				playerNum - The index of the football player in the players array.
 			
 			purpose:
-				This method will update the the spans on the player's information pageX
+				This method will update the spans on the player's information pageX
 				and calculate the average passing, rushing, and receiving yards.
 				
 				Span ids:
@@ -150,5 +169,49 @@
 					  avg_r_yards   - the average number of rushing yards for the player's Buff career
 					  avg_rec_yards - the average number of receiving yards for the player's Buff career
 */
-				
 
+function loadPlayersPage()
+{
+	var drops = document.getElementById("player_selector");
+	var load = "";
+	
+	for (var sc = 0; sc < players.length; sc++)
+	{
+		load = load + " <a id = " + sc + " onclick = switchPlayers("+sc+")> " + players[sc].name + " </a> " + " <br> </br> ";
+		console.log(load);
+		drops.innerHTML = load;
+	}
+	
+}
+
+function switchPlayers(playerNum)
+{
+	var playersYear = document.getElementById("p_year"); // String input for the player's year in college
+	var playersMajor = document.getElementById("p_major"); // String input for the player's major in college
+	var gamesPlayed = document.getElementById("g_played"); // Number input for how many games the player has played
+	
+	var playersPassing = document.getElementById("p_yards"); // The player's passing yards
+	var playersRushing = document.getElementById("r_yards"); // The player's rushing yards
+	var playersReceiving = document.getElementById("rec_yards"); // The player's receiving yards
+	
+	var avgPassing = document.getElementById("avg_p_yards"); // The average number of passing yards for the player's Buff career
+	var avgRushing = document.getElementById("avg_r_yards"); // The average number of rushing yards for the player's Buff career
+	var avgReceiving = document.getElementById("avg_rec_yards"); // The average number of receiving yards for the player's Buff career
+	
+	var athlete = playerNum; // Delcared var named plays for the specific player.
+	
+	document.getElementById("selectPlayerButton").innerHTML = players[athlete].name;
+	document.getElementById("player_img").src = players[athlete].img;
+	
+	playersYear.innerHTML = players[athlete].year;
+	playersMajor.innerHTML = players[athlete].major;
+	gamesPlayed.innerHTML = players[athlete].games_played;
+	
+	playersPassing.innerHTML = players[athlete].pass_yards;
+	playersRushing.innerHTML = players[athlete].rushing_yards;
+	playersReceiving.innerHTML = players[athlete].receiving_yards;
+	
+	avgPassing.innerHTML = (players[athlete].pass_yards / players[athlete].games_played);
+	avgRushing.innerHTML = (players[athlete].rushing_yards / players[athlete].games_played);
+	avgReceiving.innerHTML = (players[athlete].receiving_yards / players[athlete].games_played);
+}
